@@ -31,4 +31,4 @@ def api_get_user_rank():
     return jsonify(playerName=payload['playerName'], rank=payload['rank'], score=payload['score'])
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8084)
+    app.run(debug=True, port=8080)
