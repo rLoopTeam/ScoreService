@@ -17,7 +17,7 @@ def render_error():
 
 
 @app.route('/api/UpsertUserScore', methods=['POST', 'OPTIONS'])
-@cors.crossdomain(origin="*", headers="application/json")
+@cors.crossdomain(origin="*", headers="Content-type")
 def api_upsert_user_score():
     payload = request.json
     #Placeholder Function
@@ -25,7 +25,7 @@ def api_upsert_user_score():
 
 
 @app.route('/api/GetUserRank', methods=['POST', 'OPTIONS'])
-@cors.crossdomain(origin="*", headers="application/json")
+@cors.crossdomain(origin="*", headers="Content-type")
 def api_get_user_rank():
     payload = request.json
     #Placeholder Function
