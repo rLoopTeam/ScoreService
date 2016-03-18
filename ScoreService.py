@@ -16,16 +16,16 @@ def render_error():
     return render_template('error.html', title='Error', message=message, root_domain=ROOT_DOMAIN)
 
 
-@app.route('/api/UpsertUserScore', methods=['POST'])
-@cors.crossdomain(origin="*")
+@app.route('/api/UpsertUserScore', methods=['POST', 'OPTIONS'])
+@cors.crossdomain(origin="*", headers="application/json")
 def api_upsert_user_score():
     payload = request.json
     #Placeholder Function
     return jsonify(playerName=payload['playerName'], score=payload['score'], message='Upload successful.')
 
 
-@app.route('/api/GetUserRank', methods=['POST'])
-@cors.crossdomain(origin="*")
+@app.route('/api/GetUserRank', methods=['POST', 'OPTIONS'])
+@cors.crossdomain(origin="*", headers="application/json")
 def api_get_user_rank():
     payload = request.json
     #Placeholder Function
