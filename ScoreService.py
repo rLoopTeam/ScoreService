@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask import render_template
 import random
-import json
+from util import cors
 
 app = Flask(__name__)
 
@@ -10,12 +10,14 @@ ROOT_DOMAIN = "http://score.furcode.co"
 
 
 @app.route('/')
+@cors.crossdomain(origin="*")
 def render_error():
     message = "This service does nothing with this method."
     return render_template('error.html', title='Error', message=message, root_domain=ROOT_DOMAIN)
 
 
 @app.route('/api/UpsertUserScore', methods=['POST'])
+@cors.crossdomain(origin="*")
 def api_upsert_user_score():
     payload = request.json
     #Placeholder Function
@@ -23,6 +25,7 @@ def api_upsert_user_score():
 
 
 @app.route('/api/GetUserRank', methods=['POST'])
+@cors.crossdomain(origin="*")
 def api_get_user_rank():
     payload = request.json
     #Placeholder Function
