@@ -1,17 +1,19 @@
 from flask import Flask, request, jsonify
 from flask import render_template
 from util.cors import crossdomain
+from urllib.parse import urlparse
 import os
 
 from pymongo import MongoClient
 
 app = Flask(__name__)
 
-client = MongoClient(os.getenv('MONGO_URL'))
+mongo_url = os.getenv('MONGO_URL', 'mongodb://localhost:27017/break-a-pod')
+client = MongoClient(mongo_url)
 
 ROOT_DOMAIN = os.getenv('ROOT_DOMAIN', "http://rloop.org/")
 
-db = client.player_db
+db = client[urlparse(mongo_url).path.lstrip('/')]
 
 dev = os.getenv('DEV', '1') is not '0'
 
