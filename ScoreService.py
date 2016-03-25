@@ -1,17 +1,19 @@
 from flask import Flask, request, jsonify
 from flask import render_template
 from util.cors import crossdomain
+import os
 
 from pymongo import MongoClient
 
 app = Flask(__name__)
 
-client = MongoClient()
+client = MongoClient(os.getenv('MONGO_URL'))
 
-ROOT_DOMAIN = "http://rloop.org/"
+ROOT_DOMAIN = os.getenv('ROOT_DOMAIN', "http://rloop.org/")
 
 db = client.player_db
 
+dev = os.getenv('DEV', '1') is not '0'
 
 @app.route('/')
 @crossdomain(origin="*")
@@ -99,4 +101,4 @@ def api_top_scores():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=dev, port=os.getenv('PORT', 8080))
