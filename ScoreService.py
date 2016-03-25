@@ -17,14 +17,14 @@ db = client[urlparse(mongo_url).path.lstrip('/')]
 
 dev = os.getenv('DEV', '1') is not '0'
 
-@app.route('/')
+@app.route('/', methods=['GET', 'OPTIONS'])
 @crossdomain(origin="*")
 def render_error():
     message = "This service does nothing with this method."
     return render_template('error.html', title='Error', message=message, root_domain=ROOT_DOMAIN)
 
 
-@app.route('/api/UpsertUserScore', methods=['POST'])
+@app.route('/api/UpsertUserScore', methods=['POST', 'OPTIONS'])
 @crossdomain(origin="*", headers="Content-type")
 def api_upsert_user_score():
     payload = request.json
@@ -37,7 +37,7 @@ def api_upsert_user_score():
     return jsonify(player=payload['player'], message='Upload successful.')
 
 
-@app.route('/api/GetUserRank')
+@app.route('/api/GetUserRank', methods=['GET', 'OPTIONS'])
 @crossdomain(origin="*", headers="Content-type")
 def api_get_user_rank():
     payload = request.json
@@ -59,7 +59,7 @@ def api_get_user_rank():
     return jsonify(player=cursor['player'], rank=rank, score=cursor['score'])
 
 
-@app.route('/api/GetNearUsers')
+@app.route('/api/GetNearUsers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin="*", headers="Content-type")
 def api_get_near_users():
     payload = request.json
@@ -85,7 +85,7 @@ def api_get_near_users():
     return jsonify(near=range1, player=payload['player'], rank=rank + 1)
 
 
-@app.route('/api/GetTopUsers')
+@app.route('/api/GetTopUsers', methods=['GET', 'OPTIONS'])
 @crossdomain(origin="*", headers="Content-type")
 def api_top_scores():
     enum = db.player_score.find().sort('score', -1)
