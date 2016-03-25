@@ -1,1 +1,1 @@
-web: gunicorn ScoreService:app
+web: gunicorn --log-file=- ScoreService:app
