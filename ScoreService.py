@@ -3,6 +3,7 @@ from flask import render_template
 from util.cors import crossdomain
 from urllib.parse import urlparse
 import os
+import re
 
 from pymongo import MongoClient
 
@@ -17,6 +18,21 @@ db = client[urlparse(mongo_url).path.lstrip('/')]
 
 dev = os.getenv('DEV', '1') is not '0'
 
+
+def clean_playername(player):
+    # Clean whitespace
+    return ' '.join(player.strip().lower().split())
+
+
+def is_valid_playername(player):
+    player_clean = clean_playername(player)
+
+    valid_chars = re.match('^[A-Za-z0-9 ]+$', player_clean) is not None  # Only allowed characters
+    valid_len = len(player_clean) > 3  # Minimum Length
+
+    return valid_len and valid_chars
+
+
 @app.route('/', methods=['GET', 'OPTIONS'])
 @crossdomain(origin="*")
 def render_error():
@@ -28,7 +44,11 @@ def render_error():
 @crossdomain(origin="*", headers="Content-type")
 def api_upsert_user_score():
     payload = request.json
-    payload['player'] = payload['player'].lower()
+
+    if not is_valid_playername(payload['player']):
+        return jsonify(error=True, code=400, message='Invalid Player Name'), 400
+
+    payload['player'] = clean_playername(payload['player'])
     payload['score'] = int(payload['score'])
 
     query = db.player_score.update_one({'player': payload['player']},
